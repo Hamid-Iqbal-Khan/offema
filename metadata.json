@@ -1,0 +1,10 @@
+{
+  "name": "Offema",
+  "description": "Discover great local and global offers around you with real-time location detection, multi-tier filtering, and instant verification.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

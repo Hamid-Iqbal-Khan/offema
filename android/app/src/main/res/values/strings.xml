@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Offema</string>
+    <string name="title_activity_main">Offema</string>
+    <string name="package_name">com.offema.app</string>
+    <string name="custom_url_scheme">com.offema.app</string>
+</resources>
