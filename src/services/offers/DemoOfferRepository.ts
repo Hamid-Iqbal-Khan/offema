@@ -8,6 +8,7 @@ import { INITIAL_CATEGORIES } from '../../config/categories';
 import { IOfferRepository } from './OfferRepository';
 import { isOfferActiveAndValid } from '../../domain/logic/offerValidity';
 import { advertisementService } from '../advertisements/AdvertisementService';
+import { CITY_SAMPLE_OFFERS } from './cityOffersSeed';
 
 /**
  * Realistic seed offers.
@@ -543,7 +544,7 @@ export class DemoOfferRepository implements IOfferRepository {
   private readonly categories: OfferCategory[];
 
   constructor(
-    customOffers: Offer[] = DEMO_OFFERS_DATA,
+    customOffers: Offer[] = [...DEMO_OFFERS_DATA, ...CITY_SAMPLE_OFFERS],
     customCategories: OfferCategory[] = INITIAL_CATEGORIES
   ) {
     this.offers = customOffers;

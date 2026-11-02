@@ -12,7 +12,7 @@ interface LocationBannerProps {
   isLoading: boolean;
   error: string | null;
   onDetectBrowserLocation: () => void;
-  onUseDemoLocation: () => void;
+  onUseDemoLocation: (city?: 'HYD' | 'BLR') => void;
   onOpenGlobalTab: () => void;
   activeRadiusKm: number;
 }
@@ -67,7 +67,7 @@ export const LocationBanner: React.FC<LocationBannerProps> = ({
             </button>
             {location.source !== 'DEMO_LOCATION' && (
               <button
-                onClick={onUseDemoLocation}
+                onClick={() => onUseDemoLocation('HYD')}
                 className="inline-flex items-center gap-1 px-2.5 py-2 text-xs font-medium text-indigo-300 hover:text-indigo-200 hover:bg-indigo-950/50 rounded-lg transition-colors cursor-pointer"
                 title="Switch to Demo Coordinates"
               >
@@ -94,17 +94,23 @@ export const LocationBanner: React.FC<LocationBannerProps> = ({
                 Location Access Needed for Nearby Discovery
               </h4>
               <p className="text-xs text-amber-700/90 mt-1 max-w-xl">
-                {error} You can enable browser permissions, try our Hyderabad sample anchor, or browse nationwide Global Offers.
+                {error} You can enable browser permissions, try our Hyderabad or Bengaluru sample areas, or browse nationwide Global Offers.
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
             <button
-              onClick={onUseDemoLocation}
+              onClick={() => onUseDemoLocation('HYD')}
               className="px-3.5 py-2 text-xs font-medium text-amber-900 bg-amber-200 hover:bg-amber-300/80 rounded-lg transition-colors cursor-pointer"
             >
-              Use Demo Location
+              Demo: Hyderabad
+            </button>
+            <button
+              onClick={() => onUseDemoLocation('BLR')}
+              className="px-3.5 py-2 text-xs font-medium text-amber-900 bg-amber-200 hover:bg-amber-300/80 rounded-lg transition-colors cursor-pointer"
+            >
+              Demo: Bengaluru
             </button>
             <button
               onClick={onOpenGlobalTab}
@@ -136,7 +142,7 @@ export const LocationBanner: React.FC<LocationBannerProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={onDetectBrowserLocation}
             disabled={isLoading}
@@ -155,10 +161,16 @@ export const LocationBanner: React.FC<LocationBannerProps> = ({
             )}
           </button>
           <button
-            onClick={onUseDemoLocation}
+            onClick={() => onUseDemoLocation('HYD')}
             className="px-3.5 py-2 text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-colors cursor-pointer"
           >
             Use Demo (Hyderabad)
+          </button>
+          <button
+            onClick={() => onUseDemoLocation('BLR')}
+            className="px-3.5 py-2 text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-colors cursor-pointer"
+          >
+            Use Demo (Bengaluru)
           </button>
         </div>
       </div>

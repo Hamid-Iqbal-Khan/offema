@@ -265,3 +265,14 @@ GitHub Pages serves the static app only. The Gemini-powered endpoints in `server
 npm run build:android   # web build for the app + cap sync
 cd android && ./gradlew assembleRelease
 ```
+
+---
+
+## 8. City Sample Catalogue (v1.2.0)
+
+`src/services/offers/cityOffersSeed.ts` generates **200 sample offers**: 100 in **Bengaluru** and 100 in **Hyderabad**, spread across 25 real neighbourhoods per city (4 offers each, approximate locality-centre coordinates) and all 8 categories.
+
+- Merchant names, discounts and promo codes are **fictional** and every offer is flagged `isSample: true`; the UI shows a *Sample* tag on cards and a notice in offer details.
+- Generation is deterministic (seeded), so the catalogue is identical on every load; validity windows are relative to load time so countdowns stay live (about 15% end within 24 hours).
+- Demo locations: **Banjara Hills, Hyderabad** and **Koramangala, Bengaluru** (switch from the home banner or the location settings).
+- When a real data source (Firebase/merchant submissions) is connected, remove `CITY_SAMPLE_OFFERS` from `DemoOfferRepository`.

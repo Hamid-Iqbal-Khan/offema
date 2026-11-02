@@ -25,6 +25,7 @@ export interface LocationError {
 
 export interface ILocationService {
   getCurrentLocation(): Promise<LocationResult>;
-  getDemoLocation(): LocationResult;
+  /** Sample anchor location. city: 'HYD' (default, Banjara Hills) or 'BLR' (Koramangala). */
+  getDemoLocation(city?: 'HYD' | 'BLR'): LocationResult;
   checkPermissionState(): Promise<PermissionState | 'unsupported'>;
 }

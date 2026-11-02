@@ -136,7 +136,17 @@ export const OfferCard: React.FC<OfferCardProps> = ({
               </span>
               <div className="min-w-0 leading-tight">
                 <span className="block text-xs font-bold text-slate-900 truncate">{offer.providerName}</span>
-                <span className="block text-[11px] text-slate-500 truncate">{offer.categoryName}</span>
+                <span className="flex items-center gap-1.5 text-[11px] text-slate-500 min-w-0">
+                  <span className="truncate">{offer.categoryName}</span>
+                  {offer.isSample && (
+                    <span
+                      className="shrink-0 text-[9px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 rounded px-1 py-px"
+                      title="Sample offer with a fictional merchant"
+                    >
+                      Sample
+                    </span>
+                  )}
+                </span>
               </div>
             </div>
 

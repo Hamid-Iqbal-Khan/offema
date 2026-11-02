@@ -69,6 +69,8 @@ export interface Offer {
   rankingScore?: number; // Optional explicit score for mixed-type comparison
   promoCode?: string;
   reviews?: Review[];
+  /** True for generated demo/sample offers (fictional merchants); UI labels these as samples. */
+  isSample?: boolean;
 }
 
 export interface OfferWithDistance extends Offer {

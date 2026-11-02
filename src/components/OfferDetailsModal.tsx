@@ -161,6 +161,13 @@ export const OfferDetailsModal: React.FC<OfferDetailsModalProps> = ({
                   {offer.title}
                 </h1>
 
+                {offer.isSample && (
+                  <p className="mt-2 inline-flex items-start gap-1.5 text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5">
+                    <span aria-hidden="true">ⓘ</span>
+                    <span>Sample offer with a fictional merchant, shown for demo purposes. Not a real promotion.</span>
+                  </p>
+                )}
+
                 {/* Value Banner */}
                 <div className="mt-3 inline-flex items-baseline gap-2 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">
                   <span className="text-lg sm:text-xl font-extrabold text-indigo-700 tabular-nums">

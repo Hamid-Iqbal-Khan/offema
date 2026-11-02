@@ -18,7 +18,7 @@ interface HomeHeroProps {
   endingTodayCount: number;
   savedCount: number;
   onRefreshLocation: () => void;
-  onUseDemoLocation: () => void;
+  onUseDemoLocation: (city?: 'HYD' | 'BLR') => void;
   onOpenLocationModal: () => void;
   onOpenSaved: () => void;
   onOpenEndingToday: () => void;
@@ -108,16 +108,28 @@ export const HomeHero: React.FC<HomeHeroProps> = ({
               <RefreshCw size={13} className={isLoadingLocation ? 'animate-spin' : ''} />
               Refresh GPS
             </button>
-            {location?.source !== 'DEMO_LOCATION' && (
-              <button
-                type="button"
-                onClick={onUseDemoLocation}
-                className="px-3 py-2 text-xs font-bold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
-                title="Switch to the Hyderabad sample area"
-              >
-                Use Demo Area
-              </button>
-            )}
+            {/* Demo city switch: Hyderabad / Bengaluru sample areas */}
+            <div className="inline-flex items-center p-0.5 rounded-xl bg-white/10 border border-white/20" role="group" aria-label="Demo area">
+              {(['HYD', 'BLR'] as const).map((c) => {
+                const active =
+                  location?.source === 'DEMO_LOCATION' &&
+                  location.label.includes(c === 'HYD' ? 'Hyderabad' : 'Bengaluru');
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => onUseDemoLocation(c)}
+                    aria-pressed={active}
+                    className={`px-2.5 py-1.5 text-[11px] font-bold rounded-lg transition-colors cursor-pointer ${
+                      active ? 'bg-white text-indigo-700 shadow-sm' : 'text-white/90 hover:bg-white/10'
+                    }`}
+                    title={`Use the ${c === 'HYD' ? 'Hyderabad' : 'Bengaluru'} demo area`}
+                  >
+                    {c === 'HYD' ? 'Hyderabad' : 'Bengaluru'}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 

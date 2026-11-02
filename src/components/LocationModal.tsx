@@ -12,7 +12,7 @@ interface LocationModalProps {
   onClose: () => void;
   currentLocation: LocationResult | null;
   onDetectBrowserLocation: () => void;
-  onUseDemoLocation: () => void;
+  onUseDemoLocation: (city?: 'HYD' | 'BLR') => void;
   onClearLocation: () => void;
   isLoading: boolean;
 }
@@ -67,7 +67,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
             </div>
             {currentLocation && (
               <p className="text-[11px] text-slate-500 mt-1">
-                Source: {currentLocation.source === 'BROWSER_GPS' ? 'Device GPS Sensor' : 'Hyderabad Demo Anchor'}
+                Source: {currentLocation.source === 'BROWSER_GPS' ? 'Device GPS Sensor' : 'Demo Anchor'}
               </p>
             )}
           </div>
@@ -100,7 +100,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
 
             <button
               onClick={() => {
-                onUseDemoLocation();
+                onUseDemoLocation('HYD');
                 onClose();
               }}
               className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-300 hover:bg-amber-50/50 transition-all text-left cursor-pointer group"
@@ -116,7 +116,30 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                   </p>
                 </div>
               </div>
-              {currentLocation?.source === 'DEMO_LOCATION' && (
+              {currentLocation?.source === 'DEMO_LOCATION' && currentLocation.label.includes('Hyderabad') && (
+                <Check size={16} className="text-amber-600 shrink-0 ml-2" />
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                onUseDemoLocation('BLR');
+                onClose();
+              }}
+              className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-300 hover:bg-amber-50/50 transition-all text-left cursor-pointer group"
+            >
+              <div className="flex items-start gap-3">
+                <MapPin size={18} className="text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-amber-800">
+                    Use Demo Location (Bengaluru)
+                  </h4>
+                  <p className="text-[11px] text-slate-500">
+                    Koramangala (12.9352° N, 77.6245° E) for exploring Bengaluru sample offers.
+                  </p>
+                </div>
+              </div>
+              {currentLocation?.source === 'DEMO_LOCATION' && currentLocation.label.includes('Bengaluru') && (
                 <Check size={16} className="text-amber-600 shrink-0 ml-2" />
               )}
             </button>

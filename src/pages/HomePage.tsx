@@ -202,8 +202,8 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   }, [locationService]);
 
-  const handleUseDemoLocation = useCallback(() => {
-    const demo = locationService.getDemoLocation();
+  const handleUseDemoLocation = useCallback((city: 'HYD' | 'BLR' = 'HYD') => {
+    const demo = locationService.getDemoLocation(city);
     setUserLocation(demo);
     setLocationError(null);
   }, [locationService]);
@@ -413,7 +413,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             endingTodayCount={endingToday.length}
             savedCount={savedPool.length}
             onRefreshLocation={handleDetectBrowserLocation}
-            onUseDemoLocation={handleUseDemoLocation}
+            onUseDemoLocation={(city?: 'HYD' | 'BLR') => handleUseDemoLocation(city === 'BLR' ? 'BLR' : 'HYD')}
             onOpenLocationModal={() => setIsLocationModalOpen(true)}
             onOpenSaved={() => setActiveTab('SAVED')}
             onOpenEndingToday={() => {
@@ -430,7 +430,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             isLoading={isLoadingLocation}
             error={locationError}
             onDetectBrowserLocation={handleDetectBrowserLocation}
-            onUseDemoLocation={handleUseDemoLocation}
+            onUseDemoLocation={(city?: 'HYD' | 'BLR') => handleUseDemoLocation(city === 'BLR' ? 'BLR' : 'HYD')}
             onOpenGlobalTab={() => setActiveTab('GLOBAL')}
             activeRadiusKm={maxDistanceKm || DEFAULT_RADIUS_KM}
           />
@@ -655,7 +655,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <EmptyState
             type="NO_LOCATION"
             onDetectLocation={handleDetectBrowserLocation}
-            onUseDemoLocation={handleUseDemoLocation}
+            onUseDemoLocation={(city?: 'HYD' | 'BLR') => handleUseDemoLocation(city === 'BLR' ? 'BLR' : 'HYD')}
             onSwitchToGlobal={() => setActiveTab('GLOBAL')}
           />
         ) : sortedOffers.length === 0 ? (
@@ -667,7 +667,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 : 'NO_FILTER_MATCHES'
             }
             onClearFilters={handleClearFilters}
-            onUseDemoLocation={handleUseDemoLocation}
+            onUseDemoLocation={(city?: 'HYD' | 'BLR') => handleUseDemoLocation(city === 'BLR' ? 'BLR' : 'HYD')}
             onSwitchToGlobal={() => setActiveTab('GLOBAL')}
             onExpandRadius={() => setMaxDistanceKm(10)}
           />
@@ -775,7 +775,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         onClose={() => setIsLocationModalOpen(false)}
         currentLocation={userLocation}
         onDetectBrowserLocation={handleDetectBrowserLocation}
-        onUseDemoLocation={handleUseDemoLocation}
+        onUseDemoLocation={(city?: 'HYD' | 'BLR') => handleUseDemoLocation(city === 'BLR' ? 'BLR' : 'HYD')}
         onClearLocation={handleClearLocation}
         isLoading={isLoadingLocation}
       />

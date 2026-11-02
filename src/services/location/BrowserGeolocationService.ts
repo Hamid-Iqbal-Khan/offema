@@ -6,6 +6,12 @@
 import { ILocationService, LocationError, LocationResult } from './LocationService';
 
 // Standard demo coordinate anchor: Banjara Hills, Hyderabad, India
+/** Bengaluru sample anchor: Koramangala */
+export const BLR_DEMO_COORDINATES = {
+  latitude: 12.9352,
+  longitude: 77.6245,
+};
+
 export const DEMO_COORDINATES = {
   latitude: 17.4156,
   longitude: 78.4350,
@@ -79,7 +85,14 @@ export class BrowserGeolocationService implements ILocationService {
     });
   }
 
-  getDemoLocation(): LocationResult {
+  getDemoLocation(city: 'HYD' | 'BLR' = 'HYD'): LocationResult {
+    if (city === 'BLR') {
+      return {
+        coordinates: BLR_DEMO_COORDINATES,
+        label: 'Koramangala, Bengaluru (Demo)',
+        source: 'DEMO_LOCATION',
+      };
+    }
     return {
       coordinates: DEMO_COORDINATES,
       label: 'Banjara Hills, Hyderabad (Demo)',
