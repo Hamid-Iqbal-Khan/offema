@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { AuthUser } from '../domain/models/Offer';
+import { BrandLogo } from './BrandLogo';
 import {
   LogOut,
   MapPin,
@@ -14,8 +15,6 @@ import {
   Shield,
   Bell,
   Plus,
-  Usb,
-  Smartphone,
 } from 'lucide-react';
 
 interface AppHeaderProps {
@@ -31,7 +30,6 @@ interface AppHeaderProps {
   onOpenAdminDashboard?: () => void;
   onOpenNotifications?: () => void;
   onOpenSubmitAd?: () => void;
-  onOpenInstallModal?: () => void;
   unreadNotificationsCount?: number;
 }
 
@@ -47,7 +45,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onOpenAdminDashboard,
   onOpenNotifications,
   onOpenSubmitAd,
-  onOpenInstallModal,
   unreadNotificationsCount = 0,
 }) => {
   const role = user?.role || 'USER';
@@ -55,8 +52,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   const isAdmin = role === 'ADMIN';
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-15 flex items-center justify-between gap-3">
+    <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         {/* Zone 1: Wordmark & Role Indicator */}
         <div className="flex items-center gap-2.5 shrink-0">
           <a
@@ -65,16 +62,17 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               e.preventDefault();
               onTabChange('NEARBY');
             }}
-            className="flex items-center gap-1.5 text-base sm:text-lg font-extrabold tracking-tight text-slate-900 whitespace-nowrap"
+            className="flex items-center whitespace-nowrap"
+            aria-label="Offema home"
           >
-            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Offema</span>
+            <BrandLogo size={30} />
           </a>
 
           {/* Role Badge */}
           {user && (
             <button
               onClick={onOpenProfile}
-              className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+              className={`hidden min-[400px]:inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full border transition-all cursor-pointer ${
                 isAdmin
                   ? 'bg-purple-50 text-purple-800 border-purple-200 hover:bg-purple-100'
                   : isAdvertizer
@@ -105,10 +103,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         </div>
 
         {/* Zone 2: Location Quick Target */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="hidden md:flex items-center gap-2 shrink-0">
           <button
             onClick={onOpenLocationModal}
-            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-colors max-w-[140px] sm:max-w-[200px] truncate cursor-pointer"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-full transition-colors max-w-[220px] truncate cursor-pointer"
             title="Change location setting"
           >
             <MapPin size={13} className="text-indigo-600 shrink-0" />
@@ -124,7 +122,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               {onOpenSubmitAd && (
                 <button
                   onClick={onOpenSubmitAd}
-                  className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-sm transition-all cursor-pointer"
+                  className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-full shadow-sm transition-all cursor-pointer"
                   title="Submit a new advertisement"
                 >
                   <Plus size={13} />
@@ -172,27 +170,15 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             </button>
           )}
 
-          {/* Cross-Platform USB / Mobile Phone Install Button */}
-          {onOpenInstallModal && (
-            <button
-              onClick={onOpenInstallModal}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-700 bg-slate-100 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-xl transition-all cursor-pointer"
-              title="Install on phone via USB cable (ADB), APK, or PWA"
-            >
-              <Usb size={13} className="text-emerald-600 shrink-0" />
-              <span className="hidden sm:inline">Install on Phone</span>
-              <span className="sm:hidden">Install</span>
-            </button>
-          )}
 
           {/* Profile / Account Toggle */}
           {user && onOpenProfile && (
             <button
               onClick={onOpenProfile}
-              className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs transition-colors cursor-pointer"
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center font-extrabold text-xs shadow-md shadow-indigo-500/25 ring-2 ring-white hover:scale-105 transition-transform cursor-pointer"
               title="Open Account Profile & Role Switcher"
             >
-              {user.phoneNumber.slice(-2)}
+              {(user.displayName?.trim().charAt(0) || user.phoneNumber.slice(-2)).toUpperCase()}
             </button>
           )}
 
@@ -200,7 +186,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           {user && (
             <button
               onClick={onLogout}
-              className="p-1.5 text-slate-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
+              className="p-2 text-slate-500 hover:text-rose-700 hover:bg-rose-50 rounded-full transition-colors cursor-pointer"
               title="Sign Out"
             >
               <LogOut size={16} />

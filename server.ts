@@ -425,58 +425,6 @@ Return ONLY a JSON object matching this schema:
   }
 });
 
-/**
- * Endpoint: GET /api/system/cross-platform-info
- * Returns USB installation instructions, ADB sideloading command helpers,
- * Capacitor Android/iOS project config, and PWA manifest metadata.
- */
-app.get('/api/system/cross-platform-info', (_req, res) => {
-  return res.json({
-    appId: 'com.offema.app',
-    appName: 'Offema',
-    version: '1.2.0',
-    platforms: {
-      android: {
-        status: 'READY',
-        packageType: 'APK / AAB / PWA / TWA',
-        usbInstallation: {
-          supported: true,
-          method: 'ADB (Android Debug Bridge) over USB Cable',
-          prerequisites: [
-            'Enable Developer Options on phone (Settings > About Phone > Tap Build Number 7 times)',
-            'Enable USB Debugging in Developer Options',
-            'Connect phone to computer using USB-C cable',
-            'Allow USB Debugging prompt on phone screen',
-          ],
-          commands: [
-            'adb devices',
-            'adb install -r Offema-release.apk',
-          ],
-          webUsbSupported: true,
-        },
-      },
-      ios: {
-        status: 'READY',
-        packageType: 'Capacitor iOS / IPA / Safari PWA',
-        usbInstallation: {
-          supported: true,
-          method: 'Xcode over USB / Apple Configurator',
-          prerequisites: [
-            'Connect iPhone to Mac using Lightning or USB-C cable',
-            'Open Xcode > Select connected iPhone as run target',
-            'Trust Developer Profile under Settings > General > VPN & Device Management',
-          ],
-        },
-      },
-      web: {
-        status: 'ACTIVE',
-        pwaInstallable: true,
-        serviceWorker: 'active',
-      },
-    },
-  });
-});
-
 // Mount Vite middleware in development
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {

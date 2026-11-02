@@ -16,7 +16,6 @@ import {
   CheckCircle,
   AlertCircle,
   Store,
-  Usb,
 } from 'lucide-react';
 import { AuthUser, UserRole } from '../domain/models/Offer';
 
@@ -26,7 +25,6 @@ interface ProfileModalProps {
   user: AuthUser;
   onSwitchRole: (newRole: 'USER' | 'ADVERTIZER') => Promise<void>;
   onLogout: () => void;
-  onOpenInstallModal?: () => void;
   totalSubmissionsCount?: number;
 }
 
@@ -36,7 +34,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   user,
   onSwitchRole,
   onLogout,
-  onOpenInstallModal,
   totalSubmissionsCount = 0,
 }) => {
   const [isSwitching, setIsSwitching] = useState(false);
@@ -195,32 +192,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
             </div>
           )}
 
-          {/* Mobile Phone USB Install Option */}
-          {onOpenInstallModal && (
-            <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Usb size={16} className="text-emerald-700" />
-                <div>
-                  <span className="block text-xs font-bold text-slate-900">
-                    Install on Phone via USB / APK
-                  </span>
-                  <span className="text-[10px] text-slate-500">
-                    Sideload over USB-C cable (ADB) or download universal APK
-                  </span>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenInstallModal();
-                }}
-                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
-              >
-                Install
-              </button>
-            </div>
-          )}
 
           {/* Sign Out Action */}
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between">

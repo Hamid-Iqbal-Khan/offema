@@ -27,7 +27,6 @@ import {
   ShoppingBag,
   FileText,
   Trash2,
-  Usb,
   Smartphone,
   Save,
   Check,
@@ -46,7 +45,6 @@ import { AdvertisementSubmissionModal } from '../components/AdvertisementSubmiss
 import { AdvertizerNotificationsModal } from '../components/AdvertizerNotificationsModal';
 import { ProfileModal } from '../components/ProfileModal';
 import { VendorOnboardingWizard } from '../components/VendorOnboardingWizard';
-import { InstallBridgeModal } from '../components/InstallBridgeModal';
 
 interface AdvertizerDashboardProps {
   user: AuthUser;
@@ -82,7 +80,6 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isOnboardingWizardOpen, setIsOnboardingWizardOpen] = useState(false);
-  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [editingAd, setEditingAd] = useState<Advertisement | null>(null);
 
   // Vendor Profile form state
@@ -254,16 +251,6 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Install on Phone via USB Button */}
-            <button
-              onClick={() => setIsInstallModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-700 bg-slate-100 hover:bg-indigo-50 border border-slate-200 rounded-xl transition-all cursor-pointer"
-              title="Install app on phone via USB cable or APK"
-            >
-              <Usb size={13} className="text-emerald-600 shrink-0" />
-              <span className="hidden sm:inline">Install on Phone (USB)</span>
-              <span className="sm:hidden">Install</span>
-            </button>
 
             {/* AI Offer Copilot Wizard Button */}
             <button
@@ -878,15 +865,9 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
         user={user}
         onSwitchRole={onSwitchRole}
         onLogout={onLogout}
-        onOpenInstallModal={() => setIsInstallModalOpen(true)}
         totalSubmissionsCount={totalCount}
       />
 
-      {/* Cross-Platform USB Install Modal */}
-      <InstallBridgeModal
-        isOpen={isInstallModalOpen}
-        onClose={() => setIsInstallModalOpen(false)}
-      />
     </div>
   );
 };

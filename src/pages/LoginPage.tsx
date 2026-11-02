@@ -15,13 +15,13 @@ import {
   Megaphone,
   CheckCircle2,
 } from 'lucide-react';
+import { AuthLayout } from '../components/AuthLayout';
 import { IAuthService } from '../services/auth/AuthService';
 
 interface LoginPageProps {
   authService: IAuthService;
   onOtpSent: (phone: string, countryCode: string, sessionInfo?: string) => void;
   onOpenDemoInfo: () => void;
-  onOpenInstallModal?: () => void;
 }
 
 const COUNTRY_CODES = [
@@ -93,12 +93,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between p-4 sm:p-6 antialiased">
+    <AuthLayout>
+    <div className="lg:min-h-screen flex flex-col justify-between p-4 sm:p-6 antialiased">
       {/* Top Banner Notice */}
       <div className="max-w-md w-full mx-auto flex items-center justify-between pt-2">
-        <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-          Offema
-        </span>
+        <span className="text-sm font-bold text-slate-900">Welcome to Offema</span>
         <button
           onClick={onOpenDemoInfo}
           className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors px-2.5 py-1 rounded-lg border border-indigo-200 cursor-pointer"
@@ -110,7 +109,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
       {/* Main Login Card */}
       <main className="max-w-md w-full mx-auto my-auto py-6">
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xl shadow-slate-200/70 space-y-6">
           {/* Header */}
           <div className="space-y-1.5 text-center">
             <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-white shadow-md shadow-indigo-600/20 mb-3">
@@ -312,5 +311,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         Offema (offema.com) · Role-Based Marketplace & Verified Merchant Feeds
       </footer>
     </div>
+    </AuthLayout>
   );
 };

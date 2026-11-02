@@ -78,7 +78,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({
   return (
     <article
       onClick={() => onSelect(offer)}
-      className="group bg-white rounded-2xl border border-slate-200/90 hover:border-indigo-300 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-indigo-500"
+      className="group bg-white rounded-3xl border border-slate-200/80 hover:border-indigo-200 shadow-sm shadow-slate-200/60 hover:shadow-xl hover:shadow-indigo-100/60 hover:-translate-y-0.5 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -123,20 +123,24 @@ export const OfferCard: React.FC<OfferCardProps> = ({
       <CountdownTimer validUntil={offer.validUntil} variant="strip" />
 
       {/* Card Content Area */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
         <div className="space-y-1.5">
-          {/* Metadata line: Merchant · Category and Action Buttons */}
+          {/* Metadata line: Merchant avatar · Name and compact actions (Save + Share) */}
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium truncate">
-              <span className="font-semibold text-slate-900 truncate max-w-[130px] sm:max-w-[170px]">
-                {offer.providerName}
+            <div className="flex items-center gap-2 min-w-0">
+              <span
+                aria-hidden="true"
+                className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-700 text-[11px] font-extrabold flex items-center justify-center shrink-0 ring-1 ring-indigo-200/70"
+              >
+                {offer.providerName.trim().charAt(0).toUpperCase()}
               </span>
-              <span aria-hidden="true">·</span>
-              <span className="truncate">{offer.categoryName}</span>
+              <div className="min-w-0 leading-tight">
+                <span className="block text-xs font-bold text-slate-900 truncate">{offer.providerName}</span>
+                <span className="block text-[11px] text-slate-500 truncate">{offer.categoryName}</span>
+              </div>
             </div>
 
-            {/* Actions: Save to Favorites & Web Share */}
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
                 onClick={handleToggleFavorite}
@@ -145,50 +149,34 @@ export const OfferCard: React.FC<OfferCardProps> = ({
                     ? `Remove ${offer.title} from favorites`
                     : `Save ${offer.title} to favorites`
                 }
-                title={isFavorite ? 'Remove from favorites' : 'Save to favorites'}
-                className={`inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500 ${
+                title={isFavorite ? 'Remove from saved' : 'Save deal'}
+                className={`w-8 h-8 inline-flex items-center justify-center rounded-full transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 ${
                   isFavorite
-                    ? 'bg-rose-50 text-rose-700 border-rose-200'
-                    : 'bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border-slate-200 hover:border-rose-200'
+                    ? 'bg-rose-50 text-rose-600'
+                    : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'
                 }`}
               >
-                <Heart
-                  size={12}
-                  className={isFavorite ? 'fill-rose-500 text-rose-500' : ''}
-                />
-                <span className="hidden sm:inline">
-                  {isFavorite ? 'Saved' : 'Save'}
-                </span>
+                <Heart size={15} className={isFavorite ? 'fill-rose-500 text-rose-500' : ''} />
               </button>
 
               <button
                 type="button"
                 onClick={handleShare}
                 aria-label={`Share offer: ${offer.title}`}
-                title="Share offer via Web Share API"
-                className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg border transition-all shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                title={copied ? 'Copied to clipboard' : 'Share deal'}
+                className={`w-8 h-8 inline-flex items-center justify-center rounded-full transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                   copied
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-2xs'
-                    : 'bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border-slate-200 hover:border-indigo-200'
+                    ? 'bg-emerald-50 text-emerald-600'
+                    : 'text-slate-400 hover:bg-indigo-50 hover:text-indigo-600'
                 }`}
               >
-                {copied ? (
-                  <>
-                    <Check size={12} className="text-emerald-600" />
-                    <span>Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 size={12} />
-                    <span>Share</span>
-                  </>
-                )}
+                {copied ? <Check size={15} /> : <Share2 size={15} />}
               </button>
             </div>
           </div>
 
           {/* Offer Title */}
-          <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug">
+          <h3 className="pt-1 text-[15px] font-bold text-slate-900 group-hover:text-indigo-700 transition-colors line-clamp-2 leading-snug">
             {offer.title}
           </h3>
 
@@ -205,7 +193,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({
             {isLocal ? (
               <>
                 <MapPin size={14} className="text-indigo-600 shrink-0" />
-                <span className="font-semibold text-slate-800">
+                <span className="font-bold text-indigo-700">
                   {offer.formattedDistance ? `${offer.formattedDistance} away` : 'Nearby'}
                 </span>
                 {offer.location?.label && (

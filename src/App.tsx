@@ -8,14 +8,12 @@ import { AuthUser } from './domain/models/Offer';
 import { authService } from './services/auth/FirebaseAuthService';
 import { firebaseOfferRepository } from './services/offers/FirebaseOfferRepository';
 import { browserGeolocationService } from './services/location/BrowserGeolocationService';
-import { Usb } from 'lucide-react';
 import { LoginPage } from './pages/LoginPage';
 import { VerifyOtpPage } from './pages/VerifyOtpPage';
 import { HomePage } from './pages/HomePage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdvertizerDashboard } from './pages/AdvertizerDashboard';
 import { DemoInfoModal } from './components/DemoInfoModal';
-import { InstallBridgeModal } from './components/InstallBridgeModal';
 
 type AuthStep = 'LOGIN' | 'VERIFY_OTP' | 'AUTHENTICATED';
 type AppView = 'DEFAULT' | 'MARKETPLACE' | 'ADVERTIZER_DASHBOARD' | 'ADMIN_DASHBOARD';
@@ -24,7 +22,6 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [authStep, setAuthStep] = useState<AuthStep>('LOGIN');
   const [activeAppView, setActiveAppView] = useState<AppView>('DEFAULT');
-  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   // Pending OTP credentials
   const [pendingPhone, setPendingPhone] = useState<string>('9876543210');
@@ -92,7 +89,6 @@ export default function App() {
           authService={authService}
           onOtpSent={handleOtpSent}
           onOpenDemoInfo={() => setIsDemoInfoOpen(true)}
-          onOpenInstallModal={() => setIsInstallModalOpen(true)}
         />
       );
     }
@@ -107,7 +103,6 @@ export default function App() {
           onBackToLogin={() => setAuthStep('LOGIN')}
           onSuccess={handleAuthSuccess}
           onOpenDemoInfo={() => setIsDemoInfoOpen(true)}
-          onOpenInstallModal={() => setIsInstallModalOpen(true)}
         />
       );
     }
@@ -195,35 +190,6 @@ export default function App() {
         isOpen={isDemoInfoOpen}
         onClose={() => setIsDemoInfoOpen(false)}
       />
-
-      {/* Cross-Platform USB Cable & Native Phone Installation Modal */}
-      <InstallBridgeModal
-        isOpen={isInstallModalOpen}
-        onClose={() => setIsInstallModalOpen(false)}
-      />
-
-      {/* Persistent Floating USB Install Quick Action Button */}
-      <div className="fixed bottom-4 right-4 z-40 print:hidden pointer-events-auto">
-        <button
-          type="button"
-          onClick={() => setIsInstallModalOpen(true)}
-          className="flex items-center gap-2.5 px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl shadow-xl hover:shadow-2xl border border-slate-700/80 transition-all hover:scale-105 active:scale-95 cursor-pointer group"
-          title="Install Offema on Phone via USB Cable (ADB), APK, or PWA"
-        >
-          <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/30">
-            <Usb size={14} className="animate-pulse" />
-          </div>
-          <div className="text-left">
-            <div className="text-[11px] font-bold text-slate-100 flex items-center gap-1.5 leading-tight">
-              <span>Install on Phone</span>
-              <span className="text-[9px] px-1 py-0.2 bg-emerald-500/30 text-emerald-300 font-extrabold rounded border border-emerald-400/40 uppercase tracking-wider">
-                USB
-              </span>
-            </div>
-            <div className="text-[9px] text-slate-400 leading-tight">ADB • APK • iOS • PWA</div>
-          </div>
-        </button>
-      </div>
     </>
   );
 }

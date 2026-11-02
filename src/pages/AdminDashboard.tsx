@@ -25,7 +25,6 @@ import {
   Plus,
   Trash2,
   Smartphone,
-  Usb,
   Eye,
   Check,
   ChevronLeft,
@@ -49,7 +48,6 @@ import { loginActivityService } from '../services/auth/LoginActivityService';
 import { AdminReviewModal } from '../components/AdminReviewModal';
 import { UserCrudModal } from '../components/UserCrudModal';
 import { VendorDetailModal } from '../components/VendorDetailModal';
-import { InstallBridgeModal } from '../components/InstallBridgeModal';
 import { INITIAL_CATEGORIES } from '../config/categories';
 
 interface AdminDashboardProps {
@@ -101,7 +99,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(false);
 
   // Install on Phone via USB Modal
-  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   // Load Ads
   const loadAdminAds = async () => {
@@ -281,16 +278,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Install on Phone via USB Button */}
-            <button
-              onClick={() => setIsInstallModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900 rounded-xl border border-emerald-700/60 transition-colors cursor-pointer"
-              title="Install app on physical phone via USB cable or APK"
-            >
-              <Usb size={13} className="text-emerald-400" />
-              <span className="hidden sm:inline">Install on Phone (USB)</span>
-              <span className="sm:hidden">Install</span>
-            </button>
 
             <button
               onClick={onOpenDemoInfo}
@@ -1057,11 +1044,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         onUpdated={loadVendors}
       />
 
-      {/* Cross-Platform USB Install Modal */}
-      <InstallBridgeModal
-        isOpen={isInstallModalOpen}
-        onClose={() => setIsInstallModalOpen(false)}
-      />
     </div>
   );
 };

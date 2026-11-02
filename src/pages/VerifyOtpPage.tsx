@@ -4,7 +4,8 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, ArrowRight, ArrowLeft, RefreshCw, AlertCircle, Info, Sparkles, Usb } from 'lucide-react';
+import { ShieldCheck, ArrowRight, ArrowLeft, RefreshCw, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { AuthLayout } from '../components/AuthLayout';
 import { IAuthService } from '../services/auth/AuthService';
 import { AuthUser } from '../domain/models/Offer';
 
@@ -16,7 +17,6 @@ interface VerifyOtpPageProps {
   onBackToLogin: () => void;
   onSuccess: (user: AuthUser) => void;
   onOpenDemoInfo: () => void;
-  onOpenInstallModal?: () => void;
 }
 
 const RESEND_COOLDOWN_SECONDS = 30;
@@ -29,7 +29,6 @@ export const VerifyOtpPage: React.FC<VerifyOtpPageProps> = ({
   onBackToLogin,
   onSuccess,
   onOpenDemoInfo,
-  onOpenInstallModal,
 }) => {
   const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
@@ -146,7 +145,8 @@ export const VerifyOtpPage: React.FC<VerifyOtpPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between p-4 sm:p-6 antialiased">
+    <AuthLayout>
+    <div className="lg:min-h-screen flex flex-col justify-between p-4 sm:p-6 antialiased">
       {/* Top Navigation */}
       <div className="max-w-md w-full mx-auto flex items-center justify-between pt-2">
         <button
@@ -157,17 +157,6 @@ export const VerifyOtpPage: React.FC<VerifyOtpPageProps> = ({
           <span>Change Number</span>
         </button>
         <div className="flex items-center gap-2">
-          {onOpenInstallModal && (
-            <button
-              type="button"
-              onClick={onOpenInstallModal}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 transition-colors px-2.5 py-1 rounded-xl border border-emerald-200 cursor-pointer shadow-2xs"
-              title="Install this app on your phone via USB cable (ADB), APK, or PWA"
-            >
-              <Usb size={13} className="text-emerald-600 shrink-0" />
-              <span>Install (USB)</span>
-            </button>
-          )}
           <button
             onClick={onOpenDemoInfo}
             className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors px-2.5 py-1 rounded-lg border border-indigo-200 cursor-pointer"
@@ -180,7 +169,7 @@ export const VerifyOtpPage: React.FC<VerifyOtpPageProps> = ({
 
       {/* Main Verification Card */}
       <main className="max-w-md w-full mx-auto my-auto py-6">
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xl shadow-slate-200/70 space-y-6">
           {/* Header */}
           <div className="space-y-1.5 text-center">
             <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-white shadow-md shadow-indigo-600/20 mb-3">
@@ -283,5 +272,6 @@ export const VerifyOtpPage: React.FC<VerifyOtpPageProps> = ({
         Need assistance? Production instances route SMS through Firebase Auth Gateway.
       </footer>
     </div>
+    </AuthLayout>
   );
 };

@@ -35,10 +35,19 @@ import { NearbyOffersMap } from '../components/NearbyOffersMap';
 import { ProfileModal } from '../components/ProfileModal';
 import { AdvertisementSubmissionModal } from '../components/AdvertisementSubmissionModal';
 import { AdvertizerNotificationsModal } from '../components/AdvertizerNotificationsModal';
-import { InstallBridgeModal } from '../components/InstallBridgeModal';
 import { advertisementService } from '../services/advertisements/AdvertisementService';
 import { AdvertisementNotification, AdvertisementSubmissionPayload } from '../domain/models/Advertisement';
-import { RotateCcw, LayoutGrid, Map as MapIcon } from 'lucide-react';
+import { HomeHero } from '../components/HomeHero';
+import { CategoryChips } from '../components/CategoryChips';
+import { DealRail } from '../components/DealRail';
+import { MobileBottomNav } from '../components/MobileBottomNav';
+import {
+  addRecentlyViewed,
+  getRecentlyViewedIds,
+  clearRecentlyViewed,
+} from '../services/history/RecentlyViewedService';
+import { getTimeRemaining, isOfferActiveAndValid } from '../domain/logic/offerValidity';
+import { RotateCcw, LayoutGrid, Map as MapIcon, Flame, History } from 'lucide-react';
 
 const DEFAULT_RADIUS_KM = 5;
 
@@ -120,13 +129,28 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [sortOption, setSortOption] = useState<SortOption>('HIGHEST_OFFER');
 
   // Selected Offer for Details View
-  const [selectedOffer, setSelectedOffer] = useState<OfferWithDistance | null>(null);
+  const [selectedOffer, setSelectedOfferState] = useState<OfferWithDistance | null>(null);
 
-  // Role Modals: Profile / Role Switcher, Submission Modal, Notifications, USB/Native Install Bridge
+  // Recently viewed deals (per user, newest first)
+  const [recentIds, setRecentIds] = useState<string[]>(() => getRecentlyViewedIds(user?.uid));
+  useEffect(() => {
+    setRecentIds(getRecentlyViewedIds(user?.uid));
+  }, [user?.uid]);
+
+  const setSelectedOffer = useCallback(
+    (offer: OfferWithDistance | null) => {
+      setSelectedOfferState(offer);
+      if (offer) setRecentIds(addRecentlyViewed(offer.id, user?.uid));
+    },
+    [user?.uid]
+  );
+
+  const endingTodayRef = React.useRef<HTMLDivElement>(null);
+
+  // Role Modals: Profile / Role Switcher, Submission Modal, Notifications
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSubmitAdModalOpen, setIsSubmitAdModalOpen] = useState(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
-  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [notifications, setNotifications] = useState<AdvertisementNotification[]>([]);
 
   useEffect(() => {
@@ -277,6 +301,70 @@ export const HomePage: React.FC<HomePageProps> = ({
     return sortOffers(filteredOffers, sortOption);
   }, [filteredOffers, sortOption]);
 
+  // --- Home discovery helpers (chips, rails, hero stats) ---
+  const radiusKm = maxDistanceKm || DEFAULT_RADIUS_KM;
+
+  // Offers in the active tab's scope before category filtering (drives chip counts)
+  const tabScopePool = useMemo(() => {
+    if (activeTab === 'SAVED') return savedPool;
+    if (activeTab === 'GLOBAL') return globalPool;
+    return nearbyPool.filter(
+      (o) => o.distanceKm === undefined || !userLocation || o.distanceKm <= radiusKm
+    );
+  }, [activeTab, savedPool, globalPool, nearbyPool, userLocation, radiusKm]);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    tabScopePool.forEach((o) => {
+      if (isOfferActiveAndValid(o)) counts[o.categoryId] = (counts[o.categoryId] || 0) + 1;
+    });
+    return counts;
+  }, [tabScopePool]);
+
+  const handleToggleCategory = (categoryId: string) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
+    );
+  };
+
+  const endingToday = useMemo(
+    () =>
+      tabScopePool
+        .filter((o) => {
+          if (!isOfferActiveAndValid(o)) return false;
+          const r = getTimeRemaining(o.validUntil);
+          return !r.isExpired && r.totalMs <= 24 * 60 * 60 * 1000;
+        })
+        .sort((a, b) => new Date(a.validUntil).getTime() - new Date(b.validUntil).getTime()),
+    [tabScopePool]
+  );
+
+  const recentlyViewed = useMemo(
+    () =>
+      recentIds
+        .map((id) => offersWithDistance.find((o) => o.id === id))
+        .filter((o): o is OfferWithDistance => Boolean(o)),
+    [recentIds, offersWithDistance]
+  );
+
+  const nearbyInRadius = useMemo(
+    () =>
+      userLocation
+        ? nearbyPool.filter((o) => o.distanceKm !== undefined && o.distanceKm <= radiusKm && isOfferActiveAndValid(o))
+        : [],
+    [nearbyPool, userLocation, radiusKm]
+  );
+
+  const bestDiscountLabel = useMemo(() => {
+    const pool = nearbyInRadius.length > 0 ? nearbyInRadius : globalPool;
+    const bestPct = pool.filter((o) => o.valueType === 'PERCENTAGE').reduce((m, o) => Math.max(m, o.value), 0);
+    if (bestPct > 0) return `${bestPct}%`;
+    const bestFlat = pool.reduce((m, o) => Math.max(m, o.value), 0);
+    return bestFlat > 0 ? `₹${bestFlat.toLocaleString('en-IN')}` : undefined;
+  }, [nearbyInRadius, globalPool]);
+
+  const isBrowsingUnfiltered = searchQuery.trim() === '' && activeFilterCount === 0;
+
   // Clear filters
   const handleClearFilters = () => {
     setSearchQuery('');
@@ -293,7 +381,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col antialiased">
+    <div className="min-h-screen bg-[radial-gradient(1200px_600px_at_50%_-200px,#eef2ff_0%,#f8fafc_60%)] flex flex-col antialiased">
       {/* Top Header */}
       <AppHeader
         user={user}
@@ -308,14 +396,35 @@ export const HomePage: React.FC<HomePageProps> = ({
         onOpenAdminDashboard={onOpenAdminDashboard}
         onOpenNotifications={() => setIsNotifModalOpen(true)}
         onOpenSubmitAd={() => setIsSubmitAdModalOpen(true)}
-        onOpenInstallModal={() => setIsInstallModalOpen(true)}
         unreadNotificationsCount={notifications.filter((n) => !n.isRead).length}
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-5">
-        {/* Location Banner (Only relevant for Nearby Section) */}
-        {activeTab === 'NEARBY' && (
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-28 sm:pb-10 space-y-5">
+        {/* Personal greeting + location + quick stats */}
+        {activeTab !== 'SAVED' && userLocation && (
+          <HomeHero
+            user={user}
+            location={userLocation}
+            isLoadingLocation={isLoadingLocation}
+            activeRadiusKm={radiusKm}
+            nearbyCount={nearbyInRadius.length}
+            bestDiscountLabel={bestDiscountLabel}
+            endingTodayCount={endingToday.length}
+            savedCount={savedPool.length}
+            onRefreshLocation={handleDetectBrowserLocation}
+            onUseDemoLocation={handleUseDemoLocation}
+            onOpenLocationModal={() => setIsLocationModalOpen(true)}
+            onOpenSaved={() => setActiveTab('SAVED')}
+            onOpenEndingToday={() => {
+              setViewMode('grid');
+              endingTodayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+          />
+        )}
+
+        {/* Location Banner: permission prompt / error states (Nearby Section) */}
+        {activeTab === 'NEARBY' && !userLocation && (
           <LocationBanner
             location={userLocation}
             isLoading={isLoadingLocation}
@@ -330,6 +439,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Navigation Tabs (Nearby vs Global vs Saved) + Search Bar */}
         <div className="space-y-3 pt-1">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="hidden sm:block">
             <TabBar
               activeTab={activeTab}
               onTabChange={setActiveTab}
@@ -337,6 +447,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               globalCount={globalPool.length}
               savedCount={savedPool.length}
             />
+            </div>
 
             <SortSelect
               value={sortOption}
@@ -351,7 +462,45 @@ export const HomePage: React.FC<HomePageProps> = ({
             onOpenFilterDrawer={() => setIsFilterDrawerOpen(true)}
             activeFilterCount={activeFilterCount}
           />
+
+          {categories.length > 0 && (
+            <CategoryChips
+              categories={categories}
+              counts={categoryCounts}
+              selectedIds={selectedCategoryIds}
+              onToggle={handleToggleCategory}
+              onClear={() => setSelectedCategoryIds([])}
+            />
+          )}
         </div>
+
+        {/* Discovery rails: deals ending today + recently viewed */}
+        {!isLoadingOffers && !offersError && viewMode === 'grid' && activeTab !== 'SAVED' && isBrowsingUnfiltered && (
+          <div className="space-y-5">
+            <div ref={endingTodayRef} className="scroll-mt-24">
+              <DealRail
+                title="Ending today"
+                subtitle="Grab these before the timer runs out"
+                icon={<Flame size={16} />}
+                accent="rose"
+                offers={endingToday}
+                onSelect={setSelectedOffer}
+              />
+            </div>
+            <DealRail
+              title="Recently viewed"
+              subtitle="Pick up where you left off"
+              icon={<History size={16} />}
+              offers={recentlyViewed}
+              onSelect={setSelectedOffer}
+              actionLabel="Clear"
+              onAction={() => {
+                clearRecentlyViewed(user?.uid);
+                setRecentIds([]);
+              }}
+            />
+          </div>
+        )}
 
         {/* Active Filters Pill Bar */}
         {(activeFilterCount > 0 || searchQuery.length > 0) && (
@@ -645,15 +794,9 @@ export const HomePage: React.FC<HomePageProps> = ({
           user={user}
           onSwitchRole={onSwitchRole}
           onLogout={onLogout}
-          onOpenInstallModal={() => setIsInstallModalOpen(true)}
-        />
+          />
       )}
 
-      {/* Cross-Platform USB / Native Install Modal */}
-      <InstallBridgeModal
-        isOpen={isInstallModalOpen}
-        onClose={() => setIsInstallModalOpen(false)}
-      />
 
       {/* Advertisement Submission Modal */}
       {user && (
@@ -678,6 +821,16 @@ export const HomePage: React.FC<HomePageProps> = ({
           }}
         />
       )}
+
+      {/* Phone bottom navigation */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        viewMode={viewMode}
+        onTabChange={setActiveTab}
+        onToggleMap={() => setViewMode((m) => (m === 'map' ? 'grid' : 'map'))}
+        onOpenProfile={user && onSwitchRole ? () => setIsProfileModalOpen(true) : undefined}
+        savedCount={savedPool.length}
+      />
     </div>
   );
 };
