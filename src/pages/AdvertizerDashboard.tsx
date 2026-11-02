@@ -233,14 +233,14 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
     <div className="min-h-screen bg-slate-50 flex flex-col antialiased">
       {/* Top Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm shrink-0">
                 <Megaphone size={16} />
               </div>
-              <span className="text-base font-extrabold tracking-tight text-slate-900">
+              <span className="hidden min-[380px]:inline text-base font-extrabold tracking-tight text-slate-900 whitespace-nowrap truncate">
                 Vendor Hub
               </span>
             </div>
@@ -250,24 +250,25 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
           </div>
 
           {/* Quick Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
 
             {/* AI Offer Copilot Wizard Button */}
             <button
               onClick={() => setIsOnboardingWizardOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
               title="Generate new promotion using AI Agent"
+              aria-label="AI Offer Copilot"
             >
-              <Sparkles size={13} className="text-indigo-600" />
+              <Sparkles size={14} className="text-indigo-600" />
               <span className="hidden sm:inline">AI Offer Copilot</span>
-              <span className="sm:hidden">AI Offer</span>
             </button>
 
             {/* View Marketplace Button */}
             <button
               onClick={onViewMarketplace}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer whitespace-nowrap"
               title="Browse live customer marketplace"
+              aria-label="Live Marketplace"
             >
               <ExternalLink size={13} />
               <span className="hidden md:inline">Live Marketplace</span>
@@ -276,8 +277,9 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
             {/* Role Switcher Pill */}
             <button
               onClick={() => onSwitchRole('USER')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-colors cursor-pointer whitespace-nowrap"
               title="Switch to User (Consumer) Mode"
+              aria-label="Switch to User"
             >
               <ArrowRightLeft size={13} />
               <span className="hidden sm:inline">Switch to User</span>
@@ -300,7 +302,7 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
             {/* Profile Avatar */}
             <button
               onClick={() => setIsProfileModalOpen(true)}
-              className="w-8 h-8 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center justify-center font-bold text-xs transition-colors cursor-pointer"
+              className="w-8 h-8 shrink-0 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center font-bold text-xs transition-transform hover:scale-105 cursor-pointer"
               title="Account & Role Settings"
             >
               {user.phoneNumber.slice(-2)}
@@ -309,16 +311,17 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
             {/* New Ad CTA */}
             <button
               onClick={handleCreateNewAd}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 p-2 sm:px-3.5 sm:py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-md shadow-indigo-600/20 transition-all cursor-pointer whitespace-nowrap"
+              aria-label="Create Ad"
             >
               <Plus size={15} />
-              <span>Create Ad</span>
+              <span className="hidden sm:inline">Create Ad</span>
             </button>
           </div>
         </div>
 
         {/* Tab Selector */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex gap-2 border-t border-slate-100 overflow-x-auto py-2">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 flex gap-2 border-t border-slate-100 overflow-x-auto py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <button
             onClick={() => setActiveTab('CAMPAIGNS')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
@@ -340,7 +343,7 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
             }`}
           >
             <Building2 size={14} />
-            <span>Vendor Profile CRUD</span>
+            <span>Vendor Profile</span>
           </button>
 
           <button
@@ -584,7 +587,7 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
               <div>
                 <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                   <Building2 size={16} className="text-amber-600" />
-                  <span>Vendor Business Profile CRUD</span>
+                  <span>Vendor Business Profile</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Manage your store identity, contact info, operating hours, and location

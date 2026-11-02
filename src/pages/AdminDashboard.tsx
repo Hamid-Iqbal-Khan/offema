@@ -255,29 +255,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     <div className="min-h-screen bg-slate-100 flex flex-col antialiased">
       {/* Admin Top Navigation */}
       <header className="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/20">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 shrink-0 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/20">
               <ShieldCheck size={18} />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-extrabold tracking-tight">
-                  Admin Oversight Panel
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-base font-extrabold tracking-tight whitespace-nowrap truncate">
+                  <span className="sm:hidden">Admin Panel</span>
+                  <span className="hidden sm:inline">Admin Oversight Panel</span>
                 </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-400/30 uppercase tracking-wider">
+                <span className="hidden min-[480px]:inline px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-400/30 uppercase tracking-wider whitespace-nowrap">
                   Verified Root
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden sm:block">
-                Backend-Enforced Role, User CRUD, Vendor Management &amp; Usage Analytics
+                User Management, Vendor Management &amp; Usage Analytics
               </p>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
 
             <button
               onClick={onOpenDemoInfo}
@@ -306,7 +307,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
 
         {/* Global Module Navigation Tabs */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 border-t border-slate-800/80 overflow-x-auto py-2">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex gap-2 border-t border-slate-800/80 overflow-x-auto py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <button
             onClick={() => setActiveTab('ADS')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
@@ -328,7 +329,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }`}
           >
             <Users size={14} />
-            <span>User Management CRUD</span>
+            <span>User Management</span>
           </button>
 
           <button
@@ -340,7 +341,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }`}
           >
             <Building2 size={14} />
-            <span>Vendor Management CRUD</span>
+            <span>Vendor Management</span>
           </button>
 
           <button
@@ -352,7 +353,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }`}
           >
             <Activity size={14} />
-            <span>Login Activity &amp; Analytics (DAU/WAU/MAU)</span>
+            <span>Login Activity &amp; Analytics</span>
           </button>
         </div>
       </header>
@@ -553,8 +554,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {activeTab === 'USERS' && (
           <div className="space-y-4">
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
-              <div className="flex items-center gap-2 w-full md:w-auto">
-                <div className="relative w-full md:w-72">
+              <div className="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto">
+                <div className="relative col-span-2 w-full md:w-72">
                   <Search size={14} className="absolute left-3 top-3 text-slate-400" />
                   <input
                     type="text"
@@ -609,9 +610,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </button>
             </div>
 
-            {/* Users Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
-              <table className="w-full text-left border-collapse">
+            <p className="sm:hidden text-[11px] font-semibold text-slate-400 -mb-2">Swipe the table sideways to see more →</p>
+            {/* Users Table (scrolls sideways on small screens instead of clipping) */}
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-x-auto shadow-xs">
+              <table className="w-full min-w-[760px] text-left border-collapse">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                     <th className="p-3.5">User</th>
@@ -953,8 +955,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <span>Real-Time Authentication &amp; Activity Log Stream</span>
                   </h3>
 
+                  <p className="sm:hidden text-[11px] font-semibold text-slate-400">Swipe the table sideways to see more →</p>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs divide-y divide-slate-100">
+                    <table className="w-full min-w-[680px] text-left text-xs divide-y divide-slate-100 whitespace-nowrap">
                       <thead>
                         <tr className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                           <th className="pb-2">Timestamp</th>
