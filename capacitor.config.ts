@@ -39,6 +39,13 @@ const config: CapacitorConfig = {
     scheme: 'Offema',
   },
   plugins: {
+    // Edge-to-edge on Android: Capacitor injects --safe-area-inset-* CSS vars
+    // (used by the app's headers, sheets and bottom nav).
+    SystemBars: {
+      insetsHandling: 'css',
+      style: 'LIGHT',
+      initialViewportFitValueHint: 'cover',
+    },
     Geolocation: {
       requestPermissionOnLoad: false,
     },

@@ -25,7 +25,7 @@ export const DemoInfoModal: React.FC<DemoInfoModalProps> = ({ isOpen, onClose })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="safe-overlay fixed inset-0 z-50 overflow-y-auto">
       <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
         onClick={onClose}

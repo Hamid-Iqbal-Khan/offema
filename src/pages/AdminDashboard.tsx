@@ -32,6 +32,7 @@ import {
   TrendingUp,
   ShieldAlert,
 } from 'lucide-react';
+import { useSystemBarStyle } from '../hooks/useSystemBarStyle';
 import { AuthUser } from '../domain/models/Offer';
 import {
   Advertisement,
@@ -65,6 +66,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onViewMarketplace,
   onOpenDemoInfo,
 }) => {
+  useSystemBarStyle('light-content');
   const [activeTab, setActiveTab] = useState<AdminTab>('ADS');
 
   // Advertisements State
@@ -252,9 +254,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col antialiased">
+    <div className="min-h-screen bg-slate-100 flex flex-col antialiased pb-[var(--sab)]">
       {/* Admin Top Navigation */}
-      <header className="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 shadow-md">
+      <header className="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 shadow-md pt-[var(--sat)] pl-[var(--sal)] pr-[var(--sar)]">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand */}
           <div className="flex items-center gap-3 min-w-0">

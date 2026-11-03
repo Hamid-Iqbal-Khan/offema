@@ -48,6 +48,7 @@ import {
 } from '../services/history/RecentlyViewedService';
 import { getTimeRemaining, isOfferActiveAndValid } from '../domain/logic/offerValidity';
 import { RotateCcw, LayoutGrid, Map as MapIcon, Flame, History } from 'lucide-react';
+import { useSystemBarStyle } from '../hooks/useSystemBarStyle';
 
 const DEFAULT_RADIUS_KM = 5;
 
@@ -76,6 +77,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenAdvertizerDashboard,
   onOpenAdminDashboard,
 }) => {
+  useSystemBarStyle('dark-content');
   // Data state
   const [allOffers, setAllOffers] = useState<Offer[]>([]);
   const [categories, setCategories] = useState<OfferCategory[]>([]);
@@ -400,7 +402,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-28 sm:pb-10 space-y-5">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-[calc(7rem+var(--sab))] sm:pb-[calc(2.5rem+var(--sab))] space-y-5">
         {/* Personal greeting + location + quick stats */}
         {activeTab !== 'SAVED' && userLocation && (
           <HomeHero

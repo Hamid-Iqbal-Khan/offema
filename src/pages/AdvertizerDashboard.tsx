@@ -31,6 +31,7 @@ import {
   Save,
   Check,
 } from 'lucide-react';
+import { useSystemBarStyle } from '../hooks/useSystemBarStyle';
 import { AuthUser } from '../domain/models/Offer';
 import {
   Advertisement,
@@ -63,6 +64,7 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
   onViewMarketplace,
   onOpenDemoInfo,
 }) => {
+  useSystemBarStyle('dark-content');
   const [activeTab, setActiveTab] = useState<AdvertizerTab>('CAMPAIGNS');
   const [ads, setAds] = useState<Advertisement[]>([]);
   const [notifications, setNotifications] = useState<AdvertisementNotification[]>([]);
@@ -230,9 +232,9 @@ export const AdvertizerDashboard: React.FC<AdvertizerDashboardProps> = ({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col antialiased">
+    <div className="min-h-screen bg-slate-50 flex flex-col antialiased pb-[var(--sab)]">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs pt-[var(--sat)] pl-[var(--sal)] pr-[var(--sar)]">
         <div className="max-w-6xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand */}
           <div className="flex items-center gap-3 min-w-0">

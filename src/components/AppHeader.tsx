@@ -52,7 +52,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   const isAdmin = role === 'ADMIN';
 
   return (
-    <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+    <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/70 pt-[var(--sat)] pl-[var(--sal)] pr-[var(--sar)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         {/* Zone 1: Wordmark & Role Indicator */}
         <div className="flex items-center gap-2.5 shrink-0">

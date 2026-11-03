@@ -6,6 +6,7 @@
 import React from 'react';
 import { MapPin, Timer, BellRing, Heart } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
+import { useSystemBarStyle } from '../hooks/useSystemBarStyle';
 
 const VALUE_POINTS = [
   { icon: MapPin, title: 'Deals around the corner', text: 'Live offers from shops within walking distance.' },
@@ -18,8 +19,10 @@ const VALUE_POINTS = [
  * Two-column shell for the sign-in & OTP screens: brand story on the left (desktop),
  * compact brand strip on top (phones), and the form column on the right.
  */
-export const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-screen lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] bg-slate-50">
+export const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  useSystemBarStyle('light-content');
+  return (
+  <div className="min-h-screen pb-[var(--sab)] lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] bg-slate-50">
     {/* Brand panel */}
     <aside className="relative overflow-hidden text-white bg-[linear-gradient(140deg,#4338ca_0%,#6d28d9_55%,#7c3aed_100%)]">
       <div className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full bg-amber-300/25 blur-3xl" />
@@ -33,7 +36,7 @@ export const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }
       />
 
       {/* Phone: compact strip */}
-      <div className="relative lg:hidden px-5 pt-6 pb-5">
+      <div className="relative lg:hidden px-5 pt-[calc(1.5rem+var(--sat))] pb-5">
         <BrandLogo size={32} tone="light" />
         <p className="mt-3 text-lg font-extrabold leading-snug">Local deals, live around you.</p>
         <p className="text-xs text-indigo-100/90 mt-1">Discover offers nearby, save favourites, and catch flash deals in time.</p>
@@ -91,3 +94,4 @@ export const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }
     <div className="min-w-0">{children}</div>
   </div>
 );
+};
